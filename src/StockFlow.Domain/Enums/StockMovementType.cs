@@ -1,6 +1,6 @@
 ﻿namespace StockFlow.Domain.Enums;
 
-public enum WarehouseMovementType
+public enum StockMovementType
 {
     Receipt = 1,
     Issue = 2,
