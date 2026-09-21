@@ -4,5 +4,5 @@ namespace StockFlow.Domain.Repositories;
 
 public interface IProductRepository : IRepository<Product>
 {
-    Task<IReadOnlyList<Product>> GetBelowStockLevelAsync(int treshold, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<Product>> GetBelowStockLevelAsync(int threshold, CancellationToken cancellationToken = default);
 }
