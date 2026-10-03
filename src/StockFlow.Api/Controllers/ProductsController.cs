@@ -44,4 +44,13 @@ public class ProductsController : ApiControllerBase
         await _productService.DeleteAsync(id, cancellationToken);
         return NoContentResult();
     }
+
+    public async Task<ActionResult<IReadOnlyList<ProductSupplierDto>>> GetSuppliers(Guid id, CancellationToken cancellationToken) => Ok(await _productService.GetSuppliersAsync(id, cancellationToken));
+
+    [HttpPost("{id:guid}/suppliers")]
+    public async Task<ActionResult<ProductSupplierDto>> AssignSupplier(Guid id, AssignSupplierDto dto, CancellationToken cancellationToken)
+    {
+        var created = await _productService.AssignSupplierAsync(id, dto, cancellationToken);
+        return CreatedAtAction(nameof(GetSuppliers), new { id }, created);
+    }
 }
