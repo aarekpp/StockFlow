@@ -27,4 +27,7 @@ public class OrdersController : ApiControllerBase
         var created = await _orderService.CreateAsync(dto, cancellationToken);
         return CreatedAtResult(created, nameof(GetById), o => new { id = o.Id });
     }
+
+    [HttpPatch("{id:guid}/status")]
+    public async Task<ActionResult<OrderDto>> UpdateStatus(Guid id, UpdateOrderStatusDto dto, CancellationToken cancellationToken) => Ok(await _orderService.UpdateStatusAsync(id, dto, cancellationToken));
 }
