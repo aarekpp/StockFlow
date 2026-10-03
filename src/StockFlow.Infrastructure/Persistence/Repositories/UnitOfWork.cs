@@ -1,5 +1,7 @@
-﻿using StockFlow.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using StockFlow.Domain.Entities;
 using StockFlow.Domain.Repositories;
+using System.Data;
 
 namespace StockFlow.Infrastructure.Persistence.Repositories;
 
@@ -43,5 +45,27 @@ internal sealed class UnitOfWork : IUnitOfWork, IDisposable, IAsyncDisposable
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task ExecuteInTransactionAsync(Func<CancellationToken, Task> operation, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
+    {
+        var strategy = _context.Database.CreateExecutionStrategy();
+
+        await strategy.ExecuteAsync(async () =>
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+
+            try
+            {
+                await operation(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }
