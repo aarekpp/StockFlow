@@ -37,7 +37,7 @@ public sealed class Product : BaseEntity
         ArgumentOutOfRangeException.ThrowIfNegative(unitPrice);
 
         Name = name.Trim();
-        Unit = Unit.Trim();
+        Unit = unit.Trim();
         Description= description?.Trim();
         UnitPrice = unitPrice;
     }
