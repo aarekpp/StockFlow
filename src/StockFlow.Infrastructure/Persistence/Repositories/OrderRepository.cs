@@ -10,4 +10,9 @@ internal sealed class OrderRepository(StockFlowDbContext context) : Repository<O
     {
         return await DbSet.Include(o => o.OrderItems).ThenInclude(i => i.Product).FirstOrDefaultAsync(o => o.Id == id, cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Order>> GetAllWithItemsAsync(CancellationToken cancellationToken = default)
+    {
+        return await DbSet.Include(o => o.Customer).Include(o => o.OrderItems).ThenInclude(i => i.Product).AsSplitQuery().OrderByDescending(o => o.PlacedAt).ToListAsync(cancellationToken);
+    }
 }
