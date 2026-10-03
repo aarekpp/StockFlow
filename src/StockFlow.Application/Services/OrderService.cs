@@ -43,7 +43,7 @@ public class OrderService : IOrderService
 
         var order = new Order(customer.Id, DateTime.UtcNow, dto.Notes);
 
-        foreach (var itemDto in dto.Items)
+        foreach (var itemDto in dto.OrderItems)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(itemDto.ProductId, cancellationToken)
                 ?? throw new NotFoundException(nameof(Product), itemDto.ProductId);
