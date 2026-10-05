@@ -1,4 +1,5 @@
 ﻿using StockFlow.Domain.Entities;
+using System.Data;
 
 namespace StockFlow.Domain.Repositories;
 
@@ -11,4 +12,6 @@ public interface IUnitOfWork
     IRepository<Customer> Customers { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    Task ExecuteInTransactionAsync(Func<CancellationToken, Task> operation, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default);
 }

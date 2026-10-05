@@ -10,5 +10,6 @@ public interface IProductService
     Task<ProductDto> CreateAsync(CreateProductDto dto, CancellationToken cancellationToken = default);
     Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto dto, CancellationToken cancellationToken = default);
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ProductSupplierDto>> GetSuppliersAsync(Guid productId, CancellationToken cancellationToken = default);
     Task<ProductSupplierDto> AssignSupplierAsync(Guid productId, AssignSupplierDto dto, CancellationToken cancellationToken = default);
 }
